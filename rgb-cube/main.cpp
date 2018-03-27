@@ -20,6 +20,10 @@ int main() {
 	std::cout << "GLFW initialized." << std::endl;
 
 	GLFWwindow *window = glfwCreateWindow(1024, 768, "RGB Cube", nullptr, nullptr);
+	if (!window) {
+		std::cout << "Failed to create GLFW window." << std::endl;
+		return -1;
+	}
 	glfwMakeContextCurrent(window);
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
@@ -31,7 +35,7 @@ int main() {
 		std::cout << "Failed to initialize GLEW." << std::endl;
 		return -1;
 	}
-	std::cout << "GLEW initialized." << std::endl;
+	std::cout << "GLEW initialized.\n" << glGetString(GL_RENDERER) << std::endl;
 
 	/* Enable depth test with less than or equal function.
 	 * https://www.khronos.org/opengl/wiki/Depth_Test
