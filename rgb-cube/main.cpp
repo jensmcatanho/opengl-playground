@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "utils.h"
+#include "utils/utils.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
