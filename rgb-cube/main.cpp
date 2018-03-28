@@ -1,6 +1,7 @@
+#include "utils/utils.h"
 
 #include <iostream>
-#include "utils/utils.h"
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -8,19 +9,8 @@ int main() {
 	/* GLFW initialization
 	 * http://www.glfw.org/docs/latest/index.html
 	 */
-	if (!glfwInit()) {
-		std::cout << "Failed to initialize GLFW." << std::endl;
-		return -1;
-	}
-	std::cout << "GLFW initialized." << std::endl;
-
-	GLFWwindow *window = glfwCreateWindow(1024, 768, "RGB Cube", nullptr, nullptr);
-	if (!window) {
-		std::cout << "Failed to create GLFW window." << std::endl;
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	Window *window = new Window("RGB Cube", 1024, 768);
+	window->Create();
 
 	/* GLEW initialization
 	 * http://glew.sourceforge.net/
@@ -98,13 +88,17 @@ int main() {
 	GLuint shaderProgram = loadShaders("resources/cube.vert", "resources/cube.frag");
 	glUseProgram(shaderProgram);
 
-	while (!glfwWindowShouldClose(window)) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// Prepare rendering.
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
+	while (!glfwWindowShouldClose(window->GetPointer())) {
+		window->DisplayFPS();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, (void *)0);
 
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		window->SwapBuffers();
+		window->PollEvents();
 	}
 
 	glDeleteProgram(shaderProgram);
@@ -112,8 +106,6 @@ int main() {
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 
-	glfwDestroyWindow(window);
-	glfwTerminate();
-
+	window->Close();
 	return 0;
 }
