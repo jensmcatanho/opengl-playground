@@ -35,6 +35,10 @@
 
 ## Visual Studio .gitignore
 
+# Solution and project files
+*.sln
+*.vcxproj*
+
 # User-specific files
 *.suo
 *.user
