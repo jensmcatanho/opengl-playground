@@ -129,12 +129,10 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
 	lastY = ypos;
 
 	callbackCamera->ProcessRotation(xoffset, yoffset);
-//	Core::GetSingleton().m_Camera->ProcessRotation(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
 	callbackCamera->ProcessZoom(yoffset);
-//	Core::GetSingleton().m_Camera->ProcessZoom(yoffset);
 }
 
 }
