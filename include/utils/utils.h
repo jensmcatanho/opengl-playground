@@ -4,6 +4,7 @@
 #include <sstream>
 #include <GL/glew.h>
 
+#include "Camera.h"
 #include "Window.h"
 
 namespace utils {

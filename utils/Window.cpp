@@ -30,11 +30,12 @@ SOFTWARE.
 
 namespace utils {
 
-void process_input(GLFWwindow *window);
+void process_input(GLFWwindow *window, std::shared_ptr<Camera> camera, GLfloat deltaTime);
 void resize_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
+std::shared_ptr<Camera> callbackCamera;
 GLboolean firstMouse = true;
 GLfloat lastX = 1024 / 2.0f;
 GLfloat lastY = 768 / 2.0f;
@@ -46,7 +47,10 @@ Window::Window(std::string title, int width, int height) :
 	m_AspectRatio(static_cast<float>(width / height)) {
 }
 
-bool Window::Create() {
+bool Window::Create(std::shared_ptr<Camera> camera) {
+	callbackCamera = camera;
+	m_Camera = camera;
+
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize GLFW." << std::endl;
 		return false;
@@ -60,12 +64,13 @@ bool Window::Create() {
 	glfwSetFramebufferSizeCallback(m_Window, resize_callback);
 	glfwSetCursorPosCallback(m_Window, mouse_callback);
 	glfwSetScrollCallback(m_Window, scroll_callback);
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	return true;
 }
 
-void Window::ProcessInput() {
-	process_input(m_Window);
+void Window::ProcessInput(GLfloat deltaTime) {
+	process_input(m_Window, m_Camera, deltaTime);
 }
 
 void Window::DisplayFPS() {
@@ -85,28 +90,25 @@ void Window::DisplayFPS() {
 	}
 }
 
-void process_input(GLFWwindow *window) {
+void process_input(GLFWwindow *window, std::shared_ptr<Camera> camera, GLfloat deltaTime) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-//	GLfloat delta_time = Core::GetSingleton().m_DeltaTime;
-
 	// W - Move forward
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-//		Core::GetSingleton().m_Camera->ProcessMovement(FORWARD, delta_time);
+		camera->ProcessMovement(FORWARD, deltaTime);
 
 	// S - Move backward
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-//		Core::GetSingleton().m_Camera->ProcessMovement(BACKWARD, delta_time);
+		camera->ProcessMovement(BACKWARD, deltaTime);
 
 	// A - Move left
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-//		Core::GetSingleton().m_Camera->ProcessMovement(LEFT, delta_time);
+		camera->ProcessMovement(LEFT, deltaTime);
 
 	// D - Move right
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		;
-//		Core::GetSingleton().m_Camera->ProcessMovement(RIGHT, delta_time);
+		camera->ProcessMovement(RIGHT, deltaTime);
 }
 
 void resize_callback(GLFWwindow *window, int width, int height) {
@@ -126,10 +128,12 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
+	callbackCamera->ProcessRotation(xoffset, yoffset);
 //	Core::GetSingleton().m_Camera->ProcessRotation(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
+	callbackCamera->ProcessZoom(yoffset);
 //	Core::GetSingleton().m_Camera->ProcessZoom(yoffset);
 }
 

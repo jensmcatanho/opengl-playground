@@ -26,7 +26,11 @@ SOFTWARE.
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "utils/Camera.h"
+
+#include <memory>
 #include <string>
+
 #include <GLFW/glfw3.h>
 
 namespace utils {
@@ -41,12 +45,12 @@ class Window {
 		/**
 		 * Create a GLFW window and an OpenGL context.
 		 */
-		bool Create();
+		bool Create(std::shared_ptr<Camera>);
 
 		/**
 		 * Process input from keyboard.
 		 */
-		void ProcessInput();
+		void ProcessInput(GLfloat);
 	
 		/**
 		 * Display FPS at the window title.
@@ -87,6 +91,11 @@ class Window {
 		 * Aspect Ratio.
 		 */
 		float m_AspectRatio;
+
+		/**
+		 * Scene camera.
+		 */
+		std::shared_ptr<Camera> m_Camera;
 
 	private:
 		/**

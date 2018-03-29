@@ -4,13 +4,15 @@
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 int main() {
 	/* GLFW initialization
 	 * http://www.glfw.org/docs/latest/index.html
 	 */
 	utils::Window *window = new utils::Window("RGB Cube", 1024, 768);
-	window->Create();
+	std::shared_ptr<utils::Camera> camera(new utils::Camera(0.0f, 0.0f, 2.0f));
+	window->Create(camera);
 
 	/* GLEW initialization
 	 * http://glew.sourceforge.net/
@@ -42,9 +44,9 @@ int main() {
 		glm::vec3(1.0f, 1.0f,  0.0f),
 		glm::vec3(0.0f, 1.0f,  0.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
-		glm::vec3(0.0f, 1.0f, -1.0f),
+		glm::vec3(1.0f, 0.0f, -1.0f),
 		glm::vec3(1.0f, 1.0f, -1.0f),
-		glm::vec3(1.0f, 0.0f, -1.0f)
+		glm::vec3(0.0f, 1.0f, -1.0f)
 	};
 
 	GLushort indices[] = {
@@ -89,13 +91,28 @@ int main() {
 	glUseProgram(shaderProgram);
 
 	// Prepare rendering.
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	GLfloat delta_time;
+	GLfloat current_frame = 0.0f;
+	GLfloat last_frame = 0.0f;
 
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	while (!glfwWindowShouldClose(window->GetPointer())) {
+		current_frame = glfwGetTime();
+		delta_time = current_frame - last_frame;
+		last_frame = current_frame;
+
 		window->DisplayFPS();
+		window->ProcessInput(delta_time);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, (void *)0);
+
+		glm::mat4 model_matrix;
+		glm::mat4 projection_matrix = window->m_Camera->ProjectionMatrix(window->m_AspectRatio);
+		glm::mat4 view_matrix = window->m_Camera->ViewMatrix();
+		glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(projection_matrix * view_matrix * model_matrix));
+//		glm::mat4 projection_matrix = glm::perspective(static_cast<double>(glm::radians(m_Camera->m_Zoom)), static_cast<double>(m_Window->m_AspectRatio), 0.0001, 10000.0);
+//		glm::mat4 view_matrix = m_Camera->ViewMatrix();;
 
 		window->SwapBuffers();
 		window->PollEvents();
