@@ -9,7 +9,7 @@ int main() {
 	/* GLFW initialization
 	 * http://www.glfw.org/docs/latest/index.html
 	 */
-	Window *window = new Window("RGB Cube", 1024, 768);
+	utils::Window *window = new utils::Window("RGB Cube", 1024, 768);
 	window->Create();
 
 	/* GLEW initialization
@@ -85,7 +85,7 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	GLuint shaderProgram = loadShaders("resources/cube.vert", "resources/cube.frag");
+	GLuint shaderProgram = utils::loadShaders("resources/cube.vert", "resources/cube.frag");
 	glUseProgram(shaderProgram);
 
 	// Prepare rendering.

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+namespace utils {
+
 std::stringstream readFile(std::string path) {
 	std::ifstream file;
 	std::stringstream string_stream;
@@ -89,4 +91,6 @@ GLuint loadShaders(const GLchar *vertex, const GLchar *frag) {
 	glDeleteShader(fragment_shader);
 
 	return shader_program;
+}
+
 }

@@ -29,6 +29,8 @@ SOFTWARE.
 #include <string>
 #include <GLFW/glfw3.h>
 
+namespace utils {
+
 class Window {
 	public:
 		/**
@@ -113,6 +115,8 @@ inline void Window::PollEvents() const {
 
 inline GLFWwindow *Window::GetPointer() const {
 	return m_Window;
+}
+
 }
 
 #endif

@@ -6,8 +6,10 @@
 
 #include "Window.h"
 
-std::stringstream readFile(std::string);
+namespace utils {
 
+std::stringstream readFile(std::string);
 GLuint loadShaders(const GLchar *, const GLchar *);
 
+}
 #endif

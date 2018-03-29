@@ -28,6 +28,8 @@ SOFTWARE.
 #include <iostream>
 #include <sstream>
 
+namespace utils {
+
 void process_input(GLFWwindow *window);
 void resize_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -129,4 +131,6 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
 //	Core::GetSingleton().m_Camera->ProcessZoom(yoffset);
+}
+
 }
