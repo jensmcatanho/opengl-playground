@@ -5,6 +5,8 @@
 #include <GL/glew.h>
 
 #include "Camera.h"
+#include "Cube.h"
+#include "Mesh.h"
 #include "Window.h"
 
 namespace utils {
