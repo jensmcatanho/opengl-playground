@@ -57,10 +57,11 @@ bool Window::Create(std::shared_ptr<Camera> camera) {
 	}
 	std::cout << "GLFW initialized." << std::endl;
 
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	m_Window = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
 	glfwMakeContextCurrent(m_Window);
-	glfwSetWindowUserPointer(m_Window, this);
 
+	glfwSetWindowUserPointer(m_Window, this);
 	glfwSetFramebufferSizeCallback(m_Window, resize_callback);
 	glfwSetCursorPosCallback(m_Window, mouse_callback);
 	glfwSetScrollCallback(m_Window, scroll_callback);

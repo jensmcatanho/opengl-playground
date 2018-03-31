@@ -11,8 +11,13 @@ int main() {
 	 * http://www.glfw.org/docs/latest/index.html
 	 */
 	utils::Window *window = new utils::Window("RGB Cube", 1024, 768);
-	std::shared_ptr<utils::Camera> camera(new utils::Camera(0.0f, 0.0f, 2.0f));
+	std::shared_ptr<utils::Camera> camera(new utils::Camera(0.0f, 0.0f, 5.0f));
 	window->Create(camera);
+
+	/* Enable MSAA.
+	 * https://www.khronos.org/opengl/wiki/Multisampling
+	 */
+	glEnable(GL_MULTISAMPLE);
 
 	/* GLEW initialization
 	 * http://glew.sourceforge.net/
@@ -95,7 +100,7 @@ int main() {
 	GLfloat current_frame = 0.0f;
 	GLfloat last_frame = 0.0f;
 
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	while (!glfwWindowShouldClose(window->GetPointer())) {
 		current_frame = glfwGetTime();
 		delta_time = current_frame - last_frame;
