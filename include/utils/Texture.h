@@ -23,61 +23,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef MESH_H
-#define MESH_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
-#include "IDrawable.h"
-#include "Texture.h"
+#include <string>
 
-#include <memory>
-#include <vector>
+#include <GL/glew.h>
 
 namespace utils {
 
-class Mesh : public IDrawable {
+class Texture {
 	public:
-		Mesh();
+		Texture();
 
-		Mesh(GLfloat, GLfloat, GLfloat);
+		~Texture();
 
-		Mesh(glm::vec3);
+		void Load(const std::string &);
 
-		virtual ~Mesh();
-
-		virtual void Init(const GLchar *, const GLchar *) override;
-
-		virtual void Draw(glm::mat4) const override;
-
-		void SetDiffuseMap(std::shared_ptr<Texture>);
-
-		void SetSpecularMap(std::shared_ptr<Texture>);
-
-	protected:
-		glm::vec3 m_Position;
-
-		std::vector<GLfloat> m_Data;
-
-		std::vector<GLushort> m_Indices;
-
-		GLuint m_NumIndices;
+		void Bind(unsigned int) const;
 
 	private:
-		GLuint m_ShaderProgram;
+		GLuint m_ID;
 
-		GLuint m_VAOHandler;
+		GLint m_Width;
 
-		std::shared_ptr<Texture> m_DiffuseMap;
+		GLint m_Height;
 
-		std::shared_ptr<Texture> m_SpecularMap;
+		GLint m_BytesPerPixel;
 };
-
-inline void Mesh::SetDiffuseMap(std::shared_ptr<Texture> texture) {
-	m_DiffuseMap = texture;
-}
-
-inline void Mesh::SetSpecularMap(std::shared_ptr<Texture> texture) {
-	m_SpecularMap = texture;
-}
 
 }
 

@@ -39,9 +39,9 @@ class Cube : public Mesh {
 		Cube(glm::vec3, GLfloat);
 
 	private:
-		void GenerateData(GLfloat);
+		void GenerateData();
 
-		GLuint m_SideSize;
+		GLint m_SideSize;
 };
 
 }

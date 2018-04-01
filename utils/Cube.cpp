@@ -29,39 +29,51 @@ SOFTWARE.
 namespace utils {
 
 Cube::Cube() :
-	Mesh(0.0f, 0.0f, 0.0f) {
+	Mesh(0.0f, 0.0f, 0.0f),
+	m_SideSize(1.0f) {
 	
-	GenerateData(1.0f);
+	GenerateData();
 }
 
 Cube::Cube(GLfloat x, GLfloat y, GLfloat z, GLfloat size) :
-	Mesh(x, y, z) {
+	Mesh(x, y, z),
+	m_SideSize(1.0f) {
 	
-	GenerateData(size);
+	GenerateData();
 }
 
 Cube::Cube(glm::vec3 position, GLfloat size) :
-	Mesh(position) {
+	Mesh(position),
+	m_SideSize(1.0f) {
 	
-	GenerateData(size);
+	GenerateData();
 }
 
-void Cube::GenerateData(GLfloat size) {
+void Cube::GenerateData() {
 	GLuint vertices_count = 8;
+	GLuint texcoords_count = 8;
 	m_NumIndices = 36;
-	m_Data.resize(vertices_count * 3);
+	m_Data.resize(vertices_count * 3 + texcoords_count * 2);
 	m_Indices.resize(m_NumIndices);
 
 	std::vector<GLfloat>::iterator d_iterator = m_Data.begin();
 	
 	*d_iterator++ = 0.0f; *d_iterator++ = 0.0f; *d_iterator++ =  0.0f;
-	*d_iterator++ = size; *d_iterator++ = 0.0f; *d_iterator++ =  0.0f;
-	*d_iterator++ = size; *d_iterator++ = size; *d_iterator++ =  0.0f;
-	*d_iterator++ = 0.0f; *d_iterator++ = size; *d_iterator++ =  0.0f;
-	*d_iterator++ = 0.0f; *d_iterator++ = 0.0f; *d_iterator++ = -size;
-	*d_iterator++ = size; *d_iterator++ = 0.0f; *d_iterator++ = -size;
-	*d_iterator++ = size; *d_iterator++ = size; *d_iterator++ = -size;
-	*d_iterator++ = 0.0f; *d_iterator++ = size; *d_iterator++ = -size;
+	*d_iterator++ = 0.0f; *d_iterator++ = 0.0f;
+	*d_iterator++ = m_SideSize; *d_iterator++ = 0.0f; *d_iterator++ = 0.0f;
+	*d_iterator++ = 1.0f; *d_iterator++ = 0.0f;
+	*d_iterator++ = m_SideSize; *d_iterator++ = m_SideSize; *d_iterator++ = 0.0f;
+	*d_iterator++ = 1.0f; *d_iterator++ = 1.0f;
+	*d_iterator++ = 0.0f; *d_iterator++ = m_SideSize; *d_iterator++ = 0.0f;
+	*d_iterator++ = 0.0f; *d_iterator++ = 1.0f;
+	*d_iterator++ = 0.0f; *d_iterator++ = 0.0f; *d_iterator++ = -m_SideSize;
+	*d_iterator++ = 0.0f; *d_iterator++ = 0.0f;
+	*d_iterator++ = m_SideSize; *d_iterator++ = 0.0f; *d_iterator++ = -m_SideSize;
+	*d_iterator++ = 1.0f; *d_iterator++ = 0.0f;
+	*d_iterator++ = m_SideSize; *d_iterator++ = m_SideSize; *d_iterator++ = -m_SideSize;
+	*d_iterator++ = 1.0f; *d_iterator++ = 1.0f;
+	*d_iterator++ = 0.0f; *d_iterator++ = m_SideSize; *d_iterator++ = -m_SideSize;
+	*d_iterator++ = 0.0f; *d_iterator++ = 1.0f;
 
 	std::vector<GLushort>::iterator i_iterator = m_Indices.begin();
 

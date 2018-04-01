@@ -35,7 +35,7 @@ int main() {
 	/* GLFW initialization
 	 * http://www.glfw.org/docs/latest/index.html
 	 */
-	utils::Window *window = new utils::Window("RGB Cube", 1024, 768);
+	utils::Window *window = new utils::Window("RGB Cube", 1024, 1024);
 	std::shared_ptr<utils::Camera> camera(new utils::Camera(0.0f, 0.0f, 5.0f));
 	window->Create(camera);
 

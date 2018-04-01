@@ -23,62 +23,52 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef MESH_H
-#define MESH_H
+#include "utils/Texture.h"
 
-#include "IDrawable.h"
-#include "Texture.h"
+#include <iostream>
 
-#include <memory>
-#include <vector>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image/stb_image.h"
 
 namespace utils {
 
-class Mesh : public IDrawable {
-	public:
-		Mesh();
-
-		Mesh(GLfloat, GLfloat, GLfloat);
-
-		Mesh(glm::vec3);
-
-		virtual ~Mesh();
-
-		virtual void Init(const GLchar *, const GLchar *) override;
-
-		virtual void Draw(glm::mat4) const override;
-
-		void SetDiffuseMap(std::shared_ptr<Texture>);
-
-		void SetSpecularMap(std::shared_ptr<Texture>);
-
-	protected:
-		glm::vec3 m_Position;
-
-		std::vector<GLfloat> m_Data;
-
-		std::vector<GLushort> m_Indices;
-
-		GLuint m_NumIndices;
-
-	private:
-		GLuint m_ShaderProgram;
-
-		GLuint m_VAOHandler;
-
-		std::shared_ptr<Texture> m_DiffuseMap;
-
-		std::shared_ptr<Texture> m_SpecularMap;
-};
-
-inline void Mesh::SetDiffuseMap(std::shared_ptr<Texture> texture) {
-	m_DiffuseMap = texture;
-}
-
-inline void Mesh::SetSpecularMap(std::shared_ptr<Texture> texture) {
-	m_SpecularMap = texture;
-}
+Texture::Texture() :
+	m_ID(0),
+	m_Width(0),
+	m_Height(0),
+	m_BytesPerPixel(0) {
 
 }
 
-#endif
+Texture::~Texture() {
+	glDeleteTextures(1, &m_ID);
+}
+
+void Texture::Load(const std::string &path) {
+	stbi_set_flip_vertically_on_load(1);
+	unsigned char *data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BytesPerPixel, 4);
+
+	if (data) {
+		glGenTextures(1, &m_ID);
+		glBindTexture(GL_TEXTURE_2D, m_ID);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	
+	} else {
+		std::cout << "Failed to load texture:" << path << std::endl;
+	}
+
+	stbi_image_free(data);
+}
+
+void Texture::Bind(unsigned int slot) const {
+	glActiveTexture(slot);
+	glBindTexture(GL_TEXTURE_2D, m_ID);
+}
+
+}
