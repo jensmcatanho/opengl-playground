@@ -35,8 +35,8 @@ int main() {
 	/* GLFW initialization
 	 * http://www.glfw.org/docs/latest/index.html
 	 */
-	utils::Window *window = new utils::Window("RGB Cube", 1024, 768);
-	std::shared_ptr<utils::Camera> camera(new utils::Camera(0.0f, 0.0f, 5.0f));
+	auto window = std::make_shared<utils::Window>("RGB Cube", 1024, 768);
+	auto camera = std::make_shared<utils::Camera>(0.0f, 0.0f, 5.0f);
 	window->Create(camera);
 
 	/* Enable MSAA.
@@ -68,7 +68,7 @@ int main() {
 	glCullFace(GL_BACK);
 	std::cout << "Back-face culling enabled." << std::endl;
 
-	std::shared_ptr<utils::Mesh> cube(new utils::Cube());
+	auto cube = std::make_shared<utils::Cube>();
 	cube->Init("resources/cube.vert", "resources/cube.frag");
 
 	// Prepare rendering.
@@ -76,7 +76,7 @@ int main() {
 	GLfloat current_frame = 0.0f;
 	GLfloat last_frame = 0.0f;
 
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 	while (!glfwWindowShouldClose(window->GetPointer())) {
 		current_frame = glfwGetTime();
 		delta_time = current_frame - last_frame;
